@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/menu_settings" >
+
+    <PreferenceCategory android:title="@string/settings_subscription" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="filterPodcast_setting"
+            android:summary="@string/filterPodcastFeeds_description"
+            android:title="@string/settings_filterPodcastFeeds" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

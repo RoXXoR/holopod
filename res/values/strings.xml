@@ -1,0 +1,16 @@
+<resources>
+
+    <string name="app_name">Holopod</string>
+    <string name="menu_settings">Settings</string>
+    <string name="action_addPodcast">AddPodcast</string>
+    <string name="action_RefreshPodcast">Refresh</string>
+    <string name="title_add">Select Feed</string>
+    <string name="settings_subscription">Subscriptions</string>
+    <string name="settings_filterPodcastFeeds">Filter for Podcasts</string>
+    <string name="filterPodcastFeeds_description">Don\'t show feeds without media content</string>
+    <string name="menu_unsubscribe">Unsubscribe</string>
+    <string name="altert_msg_unsubscribe">Are you sure you want to unsubscribe from this podcast?</string>
+    <string name="altert_ok_unsubscribe">Unsubscribe</string>
+    <string name="altert_no_unsubscribe">Cancel</string>
+
+</resources>

@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/RefreshPodcast"
+        android:icon="@drawable/ic_navigation_refresh"
+        android:showAsAction="ifRoom"
+        android:title="@string/action_RefreshPodcast"/>
+    <item
+        android:id="@+id/AddPodcast"
+        android:actionLayout="@layout/add_action"
+        android:icon="@drawable/ic_content_new"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/action_addPodcast"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+
+</menu>

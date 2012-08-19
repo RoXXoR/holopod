@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/RefreshPodcast"
+        android:icon="@drawable/ic_navigation_refresh"
+        android:showAsAction="always"
+        android:title="@string/action_RefreshPodcast"/>
+    <item android:id="@+id/menu_unsubsribe" android:title="@string/menu_unsubscribe" android:showAsAction="never"></item><item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+    
+
+</menu>
