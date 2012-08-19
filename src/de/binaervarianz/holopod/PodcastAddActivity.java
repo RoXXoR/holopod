@@ -61,27 +61,7 @@ public class PodcastAddActivity extends ListActivity {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		String url = ((TextView) v).getText().toString();
-		Channel newSubscription = new Channel(url);
-		try {
-			Document feedSource = Jsoup
-					.connect(((TextView) v).getText().toString())
-					.ignoreContentType(true).parser(Parser.xmlParser()).get();
-			if (!feedSource.select("channel title").isEmpty()) {
-				newSubscription.setTitle(feedSource.select("channel title").first().text());
-			}
-			if (!feedSource.select("channel title").isEmpty()) {
-				newSubscription.setTitle(feedSource.select("channel title").first().text());
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(db.addChannel(newSubscription)) {
-			Intent goDetails = new Intent(this, PodcastDetailsActivity.class);
-			goDetails.putExtra("Podcast", newSubscription);
-			startActivity(goDetails);
-		}
+		new AddChannelTask().execute(url);
 	}
 
 	public class GetFeedsTask extends
@@ -148,5 +128,54 @@ public class PodcastAddActivity extends ListActivity {
 					.setProgressBarIndeterminateVisibility(Boolean.FALSE);
 		}
 
+	}
+	
+	public class AddChannelTask extends
+	AsyncTask<String, Void, Channel> {
+
+		@Override
+		protected Channel doInBackground(String... urls) {
+			Channel channel = new Channel(urls[0]);
+			try {
+				Document feedSource = Jsoup
+						.connect(urls[0])
+						.ignoreContentType(true).parser(Parser.xmlParser()).get();
+				if (!feedSource.select("channel title").isEmpty()) {
+					channel.setTitle(feedSource.select("channel title").first().text());
+				}
+				if (!feedSource.select("channel title").isEmpty()) {
+					channel.setTitle(feedSource.select("channel title").first().text());
+				}
+				
+				if(db.addChannel(channel)) {
+				}
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return channel;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			PodcastAddActivity.this
+			.setProgressBarIndeterminateVisibility(Boolean.TRUE);
+		}
+		
+		@Override
+		protected void onPostExecute(Channel channel) {
+			PodcastAddActivity.this
+			.setProgressBarIndeterminateVisibility(Boolean.FALSE);
+			if (channel.getId() > 0) {
+			Intent goDetails = new Intent(getApplicationContext(), PodcastDetailsActivity.class);
+			goDetails.putExtra("Podcast", channel);
+			startActivity(goDetails);
+			finish();
+			} else {
+				//TODO add warning that add has failed
+			}
+		}
+		
 	}
 }

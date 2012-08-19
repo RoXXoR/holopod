@@ -44,8 +44,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// @formatter:off
 		String CREATE_CHANNEL_TABLE = "CREATE TABLE " + TABLE_CHANNEL + " ("
-				+ CHANNEL_ID + " INTEGER PRIMARY KEY,"
-				+ CHANNEL_URL + " TEXT,"
+				+ CHANNEL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ CHANNEL_URL + " TEXT NOT NULL,"
 				+ CHANNEL_TITLE + " TEXT,"
 				+ CHANNEL_SUBTITLE + " TEXT,"
 				+ CHANNEL_DESCRIPTION + " TEXT,"
@@ -75,7 +75,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(CHANNEL_URL, channel.getUrl());
 		values.put(CHANNEL_SUBTITLE, channel.getSubtitle());
 		// TODO check if URL is already present in database
-		db.insert(TABLE_CHANNEL, null, values);
+		long result = db.insert(TABLE_CHANNEL, null, values);
+		if (result > 0) {
+			channel.setId(result);
+		}
 		db.close();
 
 		// TODO return false if already in database
@@ -97,7 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			return null; // no channel with this id found in database
 		}
 	}
-	
+
 	public Channel getChannel(String url) {
 		SQLiteDatabase db = this.getReadableDatabase();
 

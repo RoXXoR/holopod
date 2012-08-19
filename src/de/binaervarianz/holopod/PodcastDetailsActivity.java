@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class PodcastDetailsActivity extends Activity {
 	Channel podcast;
@@ -19,7 +20,7 @@ public class PodcastDetailsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// setContentView(R.layout.podcast_details);
+		setContentView(R.layout.podcast_details);
 		podcast = (Channel) getIntent().getSerializableExtra("Podcast");
 		db = new DatabaseHandler(this);
 		ActionBar actionBar = getActionBar();
@@ -28,6 +29,11 @@ public class PodcastDetailsActivity extends Activity {
 					| ActionBar.DISPLAY_SHOW_TITLE);
 			actionBar.setTitle(podcast.toString());
 		}
+		
+		TextView title = (TextView) findViewById(R.id.podcast_detail_title);
+		title.setText(podcast.getTitle());
+		TextView subtitle = (TextView) findViewById(R.id.podcast_detail_subtitle);
+		subtitle.setText(podcast.getUrl());
 	}
 
 	@Override

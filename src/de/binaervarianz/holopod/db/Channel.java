@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Channel implements Serializable{
 	private static final long serialVersionUID = -4012775285807608513L;
 
-	int _id;
+	long _id = 0;
 	String url;
 	String title = "";
 	String subtitle;
@@ -22,7 +22,7 @@ public class Channel implements Serializable{
 	}
 
 	// Constructor
-	public Channel(int id, String url, String title, String subtitle,
+	public Channel(long id, String url, String title, String subtitle,
 			String description, String link, String image, String author,
 			String copyright, String lastupdated) {
 		this._id = id;
@@ -54,7 +54,7 @@ public class Channel implements Serializable{
 	}
 
 	// Constructor
-	public Channel(int id, String url, String title) {
+	public Channel(long id, String url, String title) {
 		this._id = id;
 		this.url = url;
 		this.title = title;
@@ -67,7 +67,7 @@ public class Channel implements Serializable{
 	}
 
 	// Constructor
-	public Channel(int id, String url) {
+	public Channel(long id, String url) {
 		this._id = id;
 		this.url = url;
 	}
@@ -78,11 +78,11 @@ public class Channel implements Serializable{
 	}
 
 	// public methods
-	public int getId() {
+	public long getId() {
 		return this._id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this._id = id;
 	}
 
