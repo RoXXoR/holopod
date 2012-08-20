@@ -34,7 +34,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String CHANNEL_LASTUPDATED = "lastupdated";
 
 	private static final String[] CHANNEL_FIELDS = { CHANNEL_ID, CHANNEL_URL,
-			CHANNEL_TITLE };
+			CHANNEL_TITLE, CHANNEL_SUBTITLE, CHANNEL_DESCRIPTION, CHANNEL_LINK,
+			CHANNEL_IMAGE, CHANNEL_AUTHOR, CHANNEL_COPYRIGHT,
+			CHANNEL_LASTUPDATED };
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -50,7 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ CHANNEL_SUBTITLE + " TEXT,"
 				+ CHANNEL_DESCRIPTION + " TEXT,"
 				+ CHANNEL_LINK + " TEXT,"
-				+ CHANNEL_IMAGE + " TEXT,"
+				+ CHANNEL_IMAGE + " INTEGER,"
 				+ CHANNEL_AUTHOR + " TEXT,"
 				+ CHANNEL_COPYRIGHT + " TEXT,"
 				+ CHANNEL_LASTUPDATED + " TEXT"
@@ -64,7 +66,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHANNEL);
 		onCreate(db);
-
 	}
 
 	// Add Channel (subscribe)
@@ -74,6 +75,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(CHANNEL_TITLE, channel.getTitle());
 		values.put(CHANNEL_URL, channel.getUrl());
 		values.put(CHANNEL_SUBTITLE, channel.getSubtitle());
+		values.put(CHANNEL_IMAGE, channel.getImage());
 		// TODO check if URL is already present in database
 		long result = db.insert(TABLE_CHANNEL, null, values);
 		if (result > 0) {
@@ -85,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return true;
 	}
 
-	public Channel getChannel(int id) {
+	public Channel getChannel(long id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor result = db.query(TABLE_CHANNEL, CHANNEL_FIELDS, CHANNEL_ID
@@ -94,8 +96,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		if (result != null) {
 			result.moveToFirst();
-			return new Channel(result.getInt(0), result.getString(1),
-					result.getString(2));
+			return new Channel(result.getLong(0), result.getString(1),
+					result.getString(2), result.getString(3),
+					result.getString(4), result.getString(5),
+					result.getLong(6), result.getString(7),
+					result.getString(8), result.getString(9));
 		} else {
 			return null; // no channel with this id found in database
 		}
@@ -109,8 +114,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				"1");
 		if (result != null) {
 			result.moveToFirst();
-			return new Channel(result.getInt(0), result.getString(1),
-					result.getString(2));
+			return new Channel(result.getLong(0), result.getString(1),
+					result.getString(2), result.getString(3),
+					result.getString(4), result.getString(5),
+					result.getLong(6), result.getString(7),
+					result.getString(8), result.getString(9));
 		} else {
 			return null; // no channel with this id found in database
 		}
@@ -125,8 +133,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// create channel list from results
 		if (result.moveToFirst()) {
 			do {
-				Channel channel = new Channel(result.getInt(0),
-						result.getString(1), result.getString(2));
+				Channel channel = new Channel(result.getLong(0),
+						result.getString(1), result.getString(2),
+						result.getString(3), result.getString(4),
+						result.getString(5), result.getLong(6),
+						result.getString(7), result.getString(8),
+						result.getString(9));
 				channelList.add(channel);
 			} while (result.moveToNext());
 		}

@@ -2,6 +2,8 @@ package de.binaervarianz.holopod;
 
 import de.binaervarianz.holopod.db.Channel;
 import de.binaervarianz.holopod.db.DatabaseHandler;
+import de.binaervarianz.holopod.db.Picture;
+import de.binaervarianz.holopod.db.PictureHandler;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -10,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PodcastDetailsActivity extends Activity {
@@ -29,11 +32,13 @@ public class PodcastDetailsActivity extends Activity {
 					| ActionBar.DISPLAY_SHOW_TITLE);
 			actionBar.setTitle(podcast.toString());
 		}
-		
+		ImageView image = (ImageView) findViewById(R.id.podcast_detail_image);
+		PictureHandler pic_db = new PictureHandler(this);
+		image.setImageBitmap(pic_db.getPicture(podcast.getImage()).toBitmap());
 		TextView title = (TextView) findViewById(R.id.podcast_detail_title);
 		title.setText(podcast.getTitle());
 		TextView subtitle = (TextView) findViewById(R.id.podcast_detail_subtitle);
-		subtitle.setText(podcast.getUrl());
+		subtitle.setText(podcast.getSubtitle());
 	}
 
 	@Override

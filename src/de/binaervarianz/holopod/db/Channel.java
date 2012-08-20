@@ -11,7 +11,7 @@ public class Channel implements Serializable{
 	String subtitle;
 	String description;
 	String link;
-	String image;
+	long image;		// key to picture.db picture._id
 	String author;
 	String copyright;
 	String lastupdated;
@@ -23,7 +23,7 @@ public class Channel implements Serializable{
 
 	// Constructor
 	public Channel(long id, String url, String title, String subtitle,
-			String description, String link, String image, String author,
+			String description, String link, long image, String author,
 			String copyright, String lastupdated) {
 		this._id = id;
 		this.url = url;
@@ -40,7 +40,7 @@ public class Channel implements Serializable{
 
 	// Constructor
 	public Channel(String url, String title, String subtitle,
-			String description, String link, String image, String author,
+			String description, String link, long image, String author,
 			String copyright, String lastupdated) {
 		this.url = url;
 		this.title = title;
@@ -120,5 +120,13 @@ public class Channel implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	public long getImage() {
+		return this.image;
+	}
+
+	public void setImage(long image_key) {
+		this.image = image_key;
 	}
 }

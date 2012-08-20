@@ -3,6 +3,7 @@ package de.binaervarianz.holopod;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.client.ClientProtocolException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,6 +12,8 @@ import org.jsoup.select.Elements;
 
 import de.binaervarianz.holopod.db.Channel;
 import de.binaervarianz.holopod.db.DatabaseHandler;
+import de.binaervarianz.holopod.db.Picture;
+import de.binaervarianz.holopod.db.PictureHandler;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
@@ -129,25 +132,35 @@ public class PodcastAddActivity extends ListActivity {
 		}
 
 	}
-	
-	public class AddChannelTask extends
-	AsyncTask<String, Void, Channel> {
+
+	public class AddChannelTask extends AsyncTask<String, Void, Channel> {
 
 		@Override
 		protected Channel doInBackground(String... urls) {
 			Channel channel = new Channel(urls[0]);
 			try {
-				Document feedSource = Jsoup
-						.connect(urls[0])
-						.ignoreContentType(true).parser(Parser.xmlParser()).get();
+				Document feedSource = Jsoup.connect(urls[0])
+						.ignoreContentType(true).parser(Parser.xmlParser())
+						.get();
 				if (!feedSource.select("channel title").isEmpty()) {
-					channel.setTitle(feedSource.select("channel title").first().text());
+					channel.setTitle(feedSource.select("channel title").first()
+							.text());
 				}
-				if (!feedSource.select("channel title").isEmpty()) {
-					channel.setTitle(feedSource.select("channel title").first().text());
+				if (!feedSource.select("channel itunes|subtitle").isEmpty()) {
+					channel.setSubtitle(feedSource
+							.select("channel itunes|subtitle").first().text());
 				}
-				
-				if(db.addChannel(channel)) {
+				if (!feedSource.select("channel itunes|image").isEmpty()) {
+
+					Picture channel_image = new Picture(feedSource
+							.select("channel itunes|image").first()
+							.attr("href"));
+					PictureHandler pic_db = new PictureHandler(
+							getApplicationContext());
+					channel.setImage(pic_db.addPicture(channel_image));
+				}
+
+				if (db.addChannel(channel)) {
 				}
 
 			} catch (IOException e) {
@@ -156,26 +169,27 @@ public class PodcastAddActivity extends ListActivity {
 			}
 			return channel;
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
 			PodcastAddActivity.this
-			.setProgressBarIndeterminateVisibility(Boolean.TRUE);
+					.setProgressBarIndeterminateVisibility(Boolean.TRUE);
 		}
-		
+
 		@Override
 		protected void onPostExecute(Channel channel) {
 			PodcastAddActivity.this
-			.setProgressBarIndeterminateVisibility(Boolean.FALSE);
+					.setProgressBarIndeterminateVisibility(Boolean.FALSE);
 			if (channel.getId() > 0) {
-			Intent goDetails = new Intent(getApplicationContext(), PodcastDetailsActivity.class);
-			goDetails.putExtra("Podcast", channel);
-			startActivity(goDetails);
-			finish();
+				Intent goDetails = new Intent(getApplicationContext(),
+						PodcastDetailsActivity.class);
+				goDetails.putExtra("Podcast", channel);
+				startActivity(goDetails);
+				finish();
 			} else {
-				//TODO add warning that add has failed
+				// TODO add warning that add has failed
 			}
 		}
-		
+
 	}
 }
