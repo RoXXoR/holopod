@@ -38,7 +38,9 @@ public class PictureHandler extends SQLiteOpenHelper {
 		String CREATE_PICTURES_TABLE = "CREATE TABLE " + TABLE_PICTURES + " ("
 				+ PICTURES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ PICTURES_BLOB + " BLOB NOT NULL,"
-				+ PICTURES_HASH + " BLOB UNIQUE"
+				+ PICTURES_HASH + " BLOB"
+				// add again when check for duplicate pictures is working
+//				+ PICTURES_HASH + " BLOB UNIQUE"
 				+ ")";
 		// @formatter:on
 		db.execSQL(CREATE_PICTURES_TABLE);

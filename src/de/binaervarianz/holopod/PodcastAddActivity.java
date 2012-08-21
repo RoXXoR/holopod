@@ -178,7 +178,14 @@ public class PodcastAddActivity extends ListActivity {
 							.first().text());
 				}
 
-				if (db.addChannel(channel)) {
+				//if (db.addChannel(channel)) {
+				//}
+
+				Elements items = feedSource.select("item");
+				for (Element item : items) {
+					if (!item.select("title").isEmpty()) {
+						Log.i("Items", item.select("title").first().text());
+					}
 				}
 
 			} catch (IOException e) {
