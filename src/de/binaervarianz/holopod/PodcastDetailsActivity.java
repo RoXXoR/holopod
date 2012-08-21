@@ -39,6 +39,14 @@ public class PodcastDetailsActivity extends Activity {
 		title.setText(podcast.getTitle());
 		TextView subtitle = (TextView) findViewById(R.id.podcast_detail_subtitle);
 		subtitle.setText(podcast.getSubtitle());
+		TextView link = (TextView) findViewById(R.id.podcast_detail_link);
+		link.setText(podcast.getLink());
+		TextView description = (TextView) findViewById(R.id.podcast_detail_description);
+		description.setText(podcast.getDescription());
+		TextView author = (TextView) findViewById(R.id.podcast_detail_author);
+		author.setText("by " + podcast.getAuthor());
+		TextView copyright = (TextView) findViewById(R.id.podcast_detail_copyright);
+		copyright.setText("Copyright: " + podcast.getCopyright());
 	}
 
 	@Override

@@ -159,6 +159,24 @@ public class PodcastAddActivity extends ListActivity {
 							getApplicationContext());
 					channel.setImage(pic_db.addPicture(channel_image));
 				}
+				if (!feedSource.select("channel description").isEmpty()) {
+					channel.setDescription(feedSource
+							.select("channel description").first().text());
+				} else {
+					if (!feedSource.select("channel itunes|summary").isEmpty()) {
+						channel.setDescription(feedSource
+								.select("channel itunes|summary").first()
+								.text());
+					}
+				}
+				if (!feedSource.select("channel itunes|author").isEmpty()) {
+					channel.setAuthor(feedSource
+							.select("channel itunes|author").first().text());
+				}
+				if (!feedSource.select("channel copyright").isEmpty()) {
+					channel.setCopyright(feedSource.select("channel copyright")
+							.first().text());
+				}
 
 				if (db.addChannel(channel)) {
 				}

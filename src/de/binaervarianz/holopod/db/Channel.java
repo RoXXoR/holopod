@@ -2,7 +2,7 @@ package de.binaervarianz.holopod.db;
 
 import java.io.Serializable;
 
-public class Channel implements Serializable{
+public class Channel implements Serializable {
 	private static final long serialVersionUID = -4012775285807608513L;
 
 	long _id = 0;
@@ -11,7 +11,7 @@ public class Channel implements Serializable{
 	String subtitle;
 	String description;
 	String link;
-	long image;		// key to picture.db picture._id
+	long image; // key to picture.db picture._id
 	String author;
 	String copyright;
 	String lastupdated;
@@ -121,12 +121,44 @@ public class Channel implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public String getLink() {
+		return this.link;
+	}
+
+	public void setLink(String link) {
+		this.link = link;
+	}
+
 	public long getImage() {
 		return this.image;
 	}
 
 	public void setImage(long image_key) {
 		this.image = image_key;
+	}
+
+	public String getAuthor() {
+		return this.author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public String getCopyright() {
+		return this.copyright;
+	}
+
+	public void setCopyright(String copyright) {
+		this.copyright = copyright;
+	}
+	
+	public String getLastupdated() {
+		return this.lastupdated;
+	}
+
+	public void setLastupdated(String lastupdated) {
+		this.lastupdated = lastupdated;
 	}
 }

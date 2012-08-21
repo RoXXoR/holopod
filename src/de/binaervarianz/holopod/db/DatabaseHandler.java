@@ -75,7 +75,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(CHANNEL_TITLE, channel.getTitle());
 		values.put(CHANNEL_URL, channel.getUrl());
 		values.put(CHANNEL_SUBTITLE, channel.getSubtitle());
+		values.put(CHANNEL_DESCRIPTION, channel.getDescription());
+		values.put(CHANNEL_LINK, channel.getLink());
 		values.put(CHANNEL_IMAGE, channel.getImage());
+		values.put(CHANNEL_AUTHOR, channel.getAuthor());
+		values.put(CHANNEL_COPYRIGHT, channel.getCopyright());
+//		values.put(CHANNEL_LASTUPDATED, channel.getLastupdated());
 		// TODO check if URL is already present in database
 		long result = db.insert(TABLE_CHANNEL, null, values);
 		if (result > 0) {
