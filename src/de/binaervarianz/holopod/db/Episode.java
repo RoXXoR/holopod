@@ -12,19 +12,23 @@ public class Episode implements Serializable {
 	String title;
 	String subtitle;
 	String description;
+	String link;
+	long image;
 	String author;
 	String keywords;
-	String link;
+	long lastupdated;
+	
 	String enc_url;
-	String enc_size;		// tag:length
-	String enc_rcvsize;		// downloaded bytes
-	String enc_duration;
+	long enc_size;			// tag:length
+	long enc_rcvsize;		// downloaded bytes
+	long enc_duration;
 	String enc_type;
 	String enc_filepath;
-	String enc_onDevice;
-	String enc_playTime;
-	String pubDate;
-	String archive;			// not available in rss-feed anymore but on device
+	Boolean enc_onDevice;	// file present on device?
+	long enc_pausedTime;	// time in enclosure file where last paused 
+	long enc_dlDate;		// timestamp when enclosure was downloaded completely
+	long pubDate;
+	Boolean archive;		// not available in rss-feed anymore but on device
 	
 	
 	public Episode() {

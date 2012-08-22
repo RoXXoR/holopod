@@ -21,7 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String TABLE_CHANNEL = "channel";
 	private static final String TABLE_EPISODE = "episode";
 
-	// Columns
+	// Columns - Channel
 	private static final String CHANNEL_ID = "_id";
 	private static final String CHANNEL_URL = "url";
 	private static final String CHANNEL_TITLE = "title";
@@ -32,6 +32,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String CHANNEL_AUTHOR = "author";
 	private static final String CHANNEL_COPYRIGHT = "copyright";
 	private static final String CHANNEL_LASTUPDATED = "lastupdated";
+	
+	// Columns - Channel
+	private static final String EPISODE_ID = "_id";
+	private static final String EPISODE_CHANNEL = "channel";	// channel._id
+	private static final String EPISODE_TITLE = "title";
+	private static final String EPISODE_SUBTITLE = "subtitle";
+	private static final String EPISODE_DESCRIPTION = "description";
+	private static final String EPISODE_LINK = "link";
+	private static final String EPISODE_IMAGE = "image";		// picture._id
+	private static final String EPISODE_AUTHOR = "author";
+	private static final String EPISODE_KEYWORDS = "keywords";
+	private static final String EPISODE_LASTUPDATED = "lastupdated";
+	private static final String EPISODE_ENC_URL = "enc_url";
+	private static final String EPISODE_ENC_SIZE = "enc_size";
+	private static final String EPISODE_ENC_RCVSIZE = "enc_rcvsize";
+	private static final String EPISODE_DURATION = "enc_duration";
+	private static final String EPISODE_ENC_TYPE = "enc_type";
+	private static final String EPISODE_ENC_FILEPATH = "enc_filepath";
+	private static final String EPISODE_ENC_ONDEVICE = "enc_onDevice";
+	private static final String EPISODE_ENC_PAUSEDTIME = "enc_pausedTime";
+	private static final String EPISODE_ENC_DLDATE = "enc_dlDate";
+	private static final String EPISODE_PUBDATE = "pubDate";
+	private static final String EPISODE_ARCHIVE = "archive";	
 
 	private static final String[] CHANNEL_FIELDS = { CHANNEL_ID, CHANNEL_URL,
 			CHANNEL_TITLE, CHANNEL_SUBTITLE, CHANNEL_DESCRIPTION, CHANNEL_LINK,
