@@ -12,6 +12,7 @@ import org.jsoup.select.Elements;
 
 import de.binaervarianz.holopod.db.Channel;
 import de.binaervarianz.holopod.db.DatabaseHandler;
+import de.binaervarianz.holopod.db.Episode;
 import de.binaervarianz.holopod.db.Picture;
 import de.binaervarianz.holopod.db.PictureHandler;
 
@@ -179,12 +180,42 @@ public class PodcastAddActivity extends ListActivity {
 				}
 
 				if (db.addChannel(channel)) {
-				}
 
-				Elements items = feedSource.select("item");
-				for (Element item : items) {
-					if (!item.select("title").isEmpty()) {
-						Log.i("Items", item.select("title").first().text());
+					Elements items = feedSource.select("item");
+					for (Element item : items) {
+						Episode newEpisode = new Episode(channel.getId());
+
+						if (!item.select("title").isEmpty()) {
+							newEpisode.setTitle(item.select("title").first()
+									.text());
+						}
+						if (!item.select("itunes|subtitle").isEmpty()) {
+							newEpisode.setSubtitle(item.select("itunes|subtitle")
+									.first().text());
+						}
+						if (!item.select("link").isEmpty()) {
+							newEpisode.setLink(item.select("link").first()
+									.text());
+						}
+						if (!item.select("description").isEmpty()) {
+							newEpisode.setDescription(item
+									.select("description").first().text());
+						} else {
+							if (!feedSource.select("itunes|summary").isEmpty()) {
+								newEpisode.setDescription(item
+										.select("itunes|summary").first()
+										.text());
+							}
+						}
+						if (!item.select("enclosure").isEmpty()) {
+							newEpisode.setEncUrl(item.select("enclosure").first()
+									.attr("url"));
+							newEpisode.setEncSize(Long.decode(item.select("enclosure").first()
+									.attr("length")));
+							newEpisode.setEncType(item.select("enclosure").first()
+									.attr("type"));
+						}
+						db.addEpisode(newEpisode);
 					}
 				}
 

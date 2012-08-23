@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -63,12 +64,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	private static final String[] EPISODE_FIELDS = { EPISODE_ID,
 			EPISODE_CHANNEL, EPISODE_TITLE, EPISODE_SUBTITLE,
-			EPISODE_DESCRIPTION, EPISODE_LINK, EPISODE_IMAGE, EPISODE_AUTHOR,
-			EPISODE_KEYWORDS, EPISODE_LASTUPDATED, EPISODE_ENC_URL,
-			EPISODE_ENC_SIZE, EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
-			EPISODE_ENC_TYPE, EPISODE_ENC_FILEPATH, EPISODE_ENC_ONDEVICE,
-			EPISODE_ENC_PAUSEDTIME, EPISODE_ENC_DLDATE, EPISODE_PUBDATE,
-			EPISODE_ARCHIVE };
+			EPISODE_DESCRIPTION, EPISODE_LINK,
+			//EPISODE_IMAGE, EPISODE_AUTHOR,
+			//EPISODE_KEYWORDS, EPISODE_LASTUPDATED,
+			EPISODE_ENC_URL,
+			EPISODE_ENC_SIZE,
+			//EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
+			EPISODE_ENC_TYPE,
+			//EPISODE_ENC_FILEPATH, EPISODE_ENC_ONDEVICE,
+			//EPISODE_ENC_PAUSEDTIME, EPISODE_ENC_DLDATE, EPISODE_PUBDATE,
+			//EPISODE_ARCHIVE 
+			};
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -90,7 +96,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ CHANNEL_LASTUPDATED + " INTEGER"
 				+ ")";
 		
-		String CREATE_EPISODE_TABLE = "CREATE TABLE " + EPISODE_CHANNEL + " ("
+		String CREATE_EPISODE_TABLE = "CREATE TABLE " + TABLE_EPISODE + " ("
 				+ EPISODE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
 				+ EPISODE_CHANNEL + " INTEGER NOT NULL,"
 				+ EPISODE_TITLE + " TEXT,"
@@ -107,19 +113,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ EPISODE_DURATION + " INTEGER,"
 				+ EPISODE_ENC_TYPE + " TEXT,"
 				+ EPISODE_ENC_FILEPATH + " TEXT,"
-				+ EPISODE_ENC_ONDEVICE + " TEXT DEFAULT FALSE,"
+				+ EPISODE_ENC_ONDEVICE + " INTEGER DEFAULT 0"
 				+ ")";
 		// @formatter:on
+		Log.i("onCreate", CREATE_CHANNEL_TABLE);
 		db.execSQL(CREATE_CHANNEL_TABLE);
+		Log.i("onCreate", CREATE_EPISODE_TABLE);
+		db.execSQL(CREATE_EPISODE_TABLE);
 
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHANNEL);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_EPISODE);
 		onCreate(db);
 	}
 
+	// **********************
+	// start of podcast channel
+	// **********************
+	
 	// Add Channel (subscribe)
 	public Boolean addChannel(Channel channel) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -141,6 +155,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 
 		// TODO return false if already in database
+		return true;
+	}
+
+	public Boolean updateChannel(Channel channel) {
+		// TODO
 		return true;
 	}
 
@@ -206,9 +225,61 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// remove channel
 	public Boolean removeChannel(Channel channel) {
 		SQLiteDatabase db = this.getWritableDatabase();
+		
+		// delete all episodes from this channel
+		db.delete(TABLE_EPISODE, EPISODE_CHANNEL + " = ?",
+				new String[] { String.valueOf(channel.getId()) });
+		
+		// delete channel
 		int rmCnt = db.delete(TABLE_CHANNEL, CHANNEL_ID + " = ?",
 				new String[] { String.valueOf(channel.getId()) });
 		db.close();
 		return (rmCnt > 0) ? true : false;
+	}
+
+	// **********************
+	// start of podcast items
+	// **********************
+	
+	// add podcast episodes
+	public Boolean addEpisode(Episode episode) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(EPISODE_CHANNEL, episode.getChannel());
+		values.put(EPISODE_TITLE, episode.getTitle());
+		values.put(EPISODE_SUBTITLE, episode.getSubtitle());
+		values.put(EPISODE_DESCRIPTION, episode.getDescription());
+		values.put(EPISODE_LINK, episode.getLink());
+		values.put(EPISODE_ENC_URL, episode.getEncUrl());
+		values.put(EPISODE_ENC_SIZE, episode.getEncSize());
+		values.put(EPISODE_ENC_TYPE, episode.getEncType());
+		long result = db.insert(TABLE_EPISODE, null, values);
+		if (result > 0) {
+			episode.setId(result);
+		}
+		db.close();
+		return true;
+	}
+	
+	public List<Episode> getEpisodesByChannel(Channel channel) {
+		List<Episode> episodeList = new ArrayList<Episode>();
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		Cursor result = db.query(TABLE_EPISODE, EPISODE_FIELDS, EPISODE_CHANNEL
+				+ "=?", new String[] { String.valueOf(channel.getId()) }, null, null, null,
+				null);
+		// create channel list from results
+		if (result.moveToFirst()) {
+			do {
+				Episode episode = new Episode(result.getLong(0),
+						result.getLong(1), result.getString(2),
+						result.getString(3), result.getString(4),
+						result.getString(5), result.getString(6),
+						result.getLong(7), result.getString(8));
+				episodeList.add(episode);
+			} while (result.moveToNext());
+		}
+		db.close();
+		return episodeList;
 	}
 }

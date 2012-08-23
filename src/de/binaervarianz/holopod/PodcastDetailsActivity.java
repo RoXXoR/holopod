@@ -2,6 +2,7 @@ package de.binaervarianz.holopod;
 
 import de.binaervarianz.holopod.db.Channel;
 import de.binaervarianz.holopod.db.DatabaseHandler;
+import de.binaervarianz.holopod.db.Episode;
 import de.binaervarianz.holopod.db.Picture;
 import de.binaervarianz.holopod.db.PictureHandler;
 import android.app.ActionBar;
@@ -10,9 +11,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class PodcastDetailsActivity extends Activity {
@@ -47,6 +51,12 @@ public class PodcastDetailsActivity extends Activity {
 		author.setText("by " + podcast.getAuthor());
 		TextView copyright = (TextView) findViewById(R.id.podcast_detail_copyright);
 		copyright.setText(podcast.getCopyright());
+		
+		ListView episodeList = (ListView) findViewById(R.id.podcast_detail_episode_listView);
+		Log.i("ChannelID", String.valueOf(db.getEpisodesByChannel(podcast)));
+		ArrayAdapter<Episode> adapter = new ArrayAdapter<Episode>(this,
+				android.R.layout.simple_list_item_1, db.getEpisodesByChannel(podcast));
+		episodeList.setAdapter(adapter);
 	}
 
 	@Override
