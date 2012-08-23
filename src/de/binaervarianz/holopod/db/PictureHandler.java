@@ -108,4 +108,12 @@ public class PictureHandler extends SQLiteOpenHelper {
 		db.close();
 		return (rmCnt > 0) ? true : false;
 	}
+	
+	public Boolean removePictureById(long id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		int rmCnt = db.delete(TABLE_PICTURES, PICTURES_ID + " = ?",
+				new String[] { String.valueOf(id) });
+		db.close();
+		return (rmCnt > 0) ? true : false;
+	}
 }
