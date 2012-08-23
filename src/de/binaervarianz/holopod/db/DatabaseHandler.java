@@ -32,15 +32,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String CHANNEL_AUTHOR = "author";
 	private static final String CHANNEL_COPYRIGHT = "copyright";
 	private static final String CHANNEL_LASTUPDATED = "lastupdated";
-	
+
 	// Columns - Channel
 	private static final String EPISODE_ID = "_id";
-	private static final String EPISODE_CHANNEL = "channel";	// channel._id
+	private static final String EPISODE_CHANNEL = "channel"; // channel._id
 	private static final String EPISODE_TITLE = "title";
 	private static final String EPISODE_SUBTITLE = "subtitle";
 	private static final String EPISODE_DESCRIPTION = "description";
 	private static final String EPISODE_LINK = "link";
-	private static final String EPISODE_IMAGE = "image";		// picture._id
+	private static final String EPISODE_IMAGE = "image"; // picture._id
 	private static final String EPISODE_AUTHOR = "author";
 	private static final String EPISODE_KEYWORDS = "keywords";
 	private static final String EPISODE_LASTUPDATED = "lastupdated";
@@ -54,12 +54,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String EPISODE_ENC_PAUSEDTIME = "enc_pausedTime";
 	private static final String EPISODE_ENC_DLDATE = "enc_dlDate";
 	private static final String EPISODE_PUBDATE = "pubDate";
-	private static final String EPISODE_ARCHIVE = "archive";	
+	private static final String EPISODE_ARCHIVE = "archive";
 
 	private static final String[] CHANNEL_FIELDS = { CHANNEL_ID, CHANNEL_URL,
 			CHANNEL_TITLE, CHANNEL_SUBTITLE, CHANNEL_DESCRIPTION, CHANNEL_LINK,
 			CHANNEL_IMAGE, CHANNEL_AUTHOR, CHANNEL_COPYRIGHT,
 			CHANNEL_LASTUPDATED };
+
+	private static final String[] EPISODE_FIELDS = { EPISODE_ID,
+			EPISODE_CHANNEL, EPISODE_TITLE, EPISODE_SUBTITLE,
+			EPISODE_DESCRIPTION, EPISODE_LINK, EPISODE_IMAGE, EPISODE_AUTHOR,
+			EPISODE_KEYWORDS, EPISODE_LASTUPDATED, EPISODE_ENC_URL,
+			EPISODE_ENC_SIZE, EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
+			EPISODE_ENC_TYPE, EPISODE_ENC_FILEPATH, EPISODE_ENC_ONDEVICE,
+			EPISODE_ENC_PAUSEDTIME, EPISODE_ENC_DLDATE, EPISODE_PUBDATE,
+			EPISODE_ARCHIVE };
 
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -75,10 +84,30 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ CHANNEL_SUBTITLE + " TEXT,"
 				+ CHANNEL_DESCRIPTION + " TEXT,"
 				+ CHANNEL_LINK + " TEXT,"
-				+ CHANNEL_IMAGE + " INTEGER,"
+				+ CHANNEL_IMAGE + " INTEGER DEFAULT 0,"
 				+ CHANNEL_AUTHOR + " TEXT,"
 				+ CHANNEL_COPYRIGHT + " TEXT,"
-				+ CHANNEL_LASTUPDATED + " TEXT"
+				+ CHANNEL_LASTUPDATED + " INTEGER"
+				+ ")";
+		
+		String CREATE_EPISODE_TABLE = "CREATE TABLE " + EPISODE_CHANNEL + " ("
+				+ EPISODE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+				+ EPISODE_CHANNEL + " INTEGER NOT NULL,"
+				+ EPISODE_TITLE + " TEXT,"
+				+ EPISODE_SUBTITLE + " TEXT,"
+				+ EPISODE_DESCRIPTION + " TEXT,"
+				+ EPISODE_LINK + " TEXT,"
+				+ EPISODE_IMAGE + " INTEGER DEFAULT 0,"
+				+ EPISODE_AUTHOR + " TEXT,"
+				+ EPISODE_KEYWORDS + " TEXT,"
+				+ EPISODE_LASTUPDATED + " INTEGER,"
+				+ EPISODE_ENC_URL + " TEXT,"
+				+ EPISODE_ENC_SIZE + " INTEGER,"
+				+ EPISODE_ENC_RCVSIZE + " INTEGER,"
+				+ EPISODE_DURATION + " INTEGER,"
+				+ EPISODE_ENC_TYPE + " TEXT,"
+				+ EPISODE_ENC_FILEPATH + " TEXT,"
+				+ EPISODE_ENC_ONDEVICE + " TEXT DEFAULT FALSE,"
 				+ ")";
 		// @formatter:on
 		db.execSQL(CREATE_CHANNEL_TABLE);
@@ -103,7 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		values.put(CHANNEL_IMAGE, channel.getImage());
 		values.put(CHANNEL_AUTHOR, channel.getAuthor());
 		values.put(CHANNEL_COPYRIGHT, channel.getCopyright());
-//		values.put(CHANNEL_LASTUPDATED, channel.getLastupdated());
+		// values.put(CHANNEL_LASTUPDATED, channel.getLastupdated());
 		// TODO check if URL is already present in database
 		long result = db.insert(TABLE_CHANNEL, null, values);
 		if (result > 0) {

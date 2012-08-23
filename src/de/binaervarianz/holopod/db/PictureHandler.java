@@ -1,5 +1,7 @@
 package de.binaervarianz.holopod.db;
 
+import de.binaervarianz.holopod.R;
+import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -7,6 +9,10 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
+import android.webkit.WebView.FindListener;
 
 public class PictureHandler extends SQLiteOpenHelper {
 
@@ -28,8 +34,11 @@ public class PictureHandler extends SQLiteOpenHelper {
 	private static final String[] PICTURE_FIELDS = { PICTURES_ID,
 			PICTURES_BLOB, PICTURES_HASH };
 
+	private Context context;
+	
 	public PictureHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 
 	@Override
@@ -44,7 +53,12 @@ public class PictureHandler extends SQLiteOpenHelper {
 				+ ")";
 		// @formatter:on
 		db.execSQL(CREATE_PICTURES_TABLE);
-
+		ContentValues values = new ContentValues();
+		Picture picture = new Picture(BitmapFactory.decodeResource(this.context.getResources(), R.drawable.nopicture));
+		values.put(PICTURES_ID, 0);
+		values.put(PICTURES_BLOB, picture.toByteArray());
+		values.put(PICTURES_HASH, picture.getHash());
+		db.insert(TABLE_PICTURES, null, values);
 	}
 
 	@Override
@@ -70,19 +84,19 @@ public class PictureHandler extends SQLiteOpenHelper {
 
 	public Picture getPicture(long id) {
 		SQLiteDatabase db = this.getReadableDatabase();
-
 		Cursor result = db.query(TABLE_PICTURES, PICTURE_FIELDS, PICTURES_ID
 				+ "=?", new String[] { String.valueOf(id) }, null, null, null,
 				"1");
-		if (result != null) {
+		if (!result.isAfterLast()) {
 			result.moveToFirst();
-			// TODO finalize with correct parameters when Constructor is ready
 			db.close();
 			return new Picture(result.getLong(0), result.getBlob(1),
 					result.getBlob(2));
 		} else {
 			db.close();
-			return null; // no picture found with this id
+			Log.i("PicHandler", Long.toString(id));
+			//return new Picture(id, BitmapFactory.decodeResource(this.context.getResources(), R.drawable.nopicture)); // no picture found with this id
+			return null;
 		}
 
 	}

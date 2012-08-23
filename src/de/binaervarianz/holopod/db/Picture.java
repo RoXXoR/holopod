@@ -59,6 +59,10 @@ public class Picture implements Serializable {
 	public Picture(String url) throws ClientProtocolException, IOException {
 		setPicture(url);
 	}
+	
+	public Picture(Bitmap picture) {
+		setPicture(picture);
+	}
 
 	public long getId() {
 		return this._id;

@@ -46,7 +46,7 @@ public class PodcastDetailsActivity extends Activity {
 		TextView author = (TextView) findViewById(R.id.podcast_detail_author);
 		author.setText("by " + podcast.getAuthor());
 		TextView copyright = (TextView) findViewById(R.id.podcast_detail_copyright);
-		copyright.setText("Copyright: " + podcast.getCopyright());
+		copyright.setText(podcast.getCopyright());
 	}
 
 	@Override
@@ -67,6 +67,7 @@ public class PodcastDetailsActivity extends Activity {
 		case R.id.menu_unsubsribe:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setCancelable(false)
+					.setTitle(podcast.getTitle())
 					.setMessage(R.string.altert_msg_unsubscribe)
 					.setPositiveButton(R.string.altert_ok_unsubscribe,
 							new DialogInterface.OnClickListener() {
