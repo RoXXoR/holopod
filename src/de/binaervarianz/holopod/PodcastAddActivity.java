@@ -79,7 +79,13 @@ public class PodcastAddActivity extends ListActivity {
 			ArrayList<String> feeds = new ArrayList<String>();
 			ArrayList<String> podcastFeeds = new ArrayList<String>();
 			try {
-				Document mainpage = Jsoup.connect(urls[0]).get();
+				Document mainpage = Jsoup.connect(urls[0]).ignoreContentType(true).get();
+				
+				if (!mainpage.getElementsByTag("enclosure").isEmpty()) {
+					podcastFeeds.add(urls[0]);
+					return podcastFeeds;
+				}
+				
 				Elements imports = mainpage.select("link[href]");
 				for (Element link : imports) {
 					if (link.attr("type").equalsIgnoreCase(

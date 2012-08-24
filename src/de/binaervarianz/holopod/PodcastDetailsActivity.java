@@ -10,13 +10,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.LinearGradient;
+import android.graphics.Shader;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RectShape;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Space;
 import android.widget.TextView;
 
 public class PodcastDetailsActivity extends Activity {
@@ -36,11 +44,16 @@ public class PodcastDetailsActivity extends Activity {
 					| ActionBar.DISPLAY_SHOW_TITLE);
 			actionBar.setTitle(podcast.toString());
 		}
-		ImageView image = (ImageView) findViewById(R.id.podcast_detail_image);
 		PictureHandler pic_db = new PictureHandler(this);
-		image.setImageBitmap(pic_db.getPicture(podcast.getImage()).toBitmap());
+		Bitmap channelImage = pic_db.getPicture(podcast.getImage()).toBitmap();
+
+		View banner = (View) findViewById(R.id.podcast_detail_banner);
+		banner.setBackgroundColor(channelImage.getPixel(5, channelImage.getHeight()/2));
+
+		ImageView image = (ImageView) findViewById(R.id.podcast_detail_image);
+		image.setImageBitmap(channelImage);
 		TextView title = (TextView) findViewById(R.id.podcast_detail_title);
-		title.setText(podcast.getTitle());
+		title.setText(podcast.getSubtitle());
 		TextView subtitle = (TextView) findViewById(R.id.podcast_detail_subtitle);
 		subtitle.setText(podcast.getSubtitle());
 		TextView link = (TextView) findViewById(R.id.podcast_detail_link);
@@ -51,11 +64,11 @@ public class PodcastDetailsActivity extends Activity {
 		author.setText("by " + podcast.getAuthor());
 		TextView copyright = (TextView) findViewById(R.id.podcast_detail_copyright);
 		copyright.setText(podcast.getCopyright());
-		
+
 		ListView episodeList = (ListView) findViewById(R.id.podcast_detail_episode_listView);
-		Log.i("ChannelID", String.valueOf(db.getEpisodesByChannel(podcast)));
 		ArrayAdapter<Episode> adapter = new ArrayAdapter<Episode>(this,
-				android.R.layout.simple_list_item_1, db.getEpisodesByChannel(podcast));
+				android.R.layout.simple_list_item_1,
+				db.getEpisodesByChannel(podcast));
 		episodeList.setAdapter(adapter);
 	}
 

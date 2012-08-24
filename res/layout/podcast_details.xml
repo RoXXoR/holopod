@@ -4,6 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <View
+        android:id="@+id/podcast_detail_banner"
+        android:layout_width="wrap_content"
+        android:layout_height="128dip"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <TextView
         android:id="@+id/podcast_detail_title"
         android:layout_width="match_parent"
@@ -17,6 +24,7 @@
         android:layout_height="128dip"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_gravity="top"
         android:scaleType="fitCenter" />
 
     <TextView
@@ -61,8 +69,8 @@
         android:id="@+id/podcast_detail_episode_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/podcast_detail_link"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/podcast_detail_link" >
     </ListView>
 
 </RelativeLayout>
