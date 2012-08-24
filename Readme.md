@@ -9,3 +9,7 @@ The author is relatively new to Android development and Java, so please be patie
 TODO
 ====
 Almost everything :-)
+
+* create base class for Channel and Episode
+* implement enclosure download with Android DownloadManager
+* implement media play (in backround)
