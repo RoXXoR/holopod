@@ -155,6 +155,38 @@ public class Episode implements Serializable {
 		this.link = link;
 	}
 
+	public long getImage() {
+		return this.image;
+	}
+	
+	public void setImage(long image_key) {
+		this.image = image_key;
+	}
+	
+	public String getAuthor() {
+		return this.author;
+	}
+	
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	public String getKeywords() {
+		return this.keywords;
+	}
+	
+	public void setKeywords(String keywords) {
+		this.keywords = keywords;
+	}
+	
+	public long getLastUpdated() {
+		return lastupdated;
+	}
+	
+	public void setLastUpdated(long lastupdated) {
+		this.lastupdated = lastupdated;
+	}
+	
 	public String getEncUrl() {
 		return this.enc_url;
 	}

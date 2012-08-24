@@ -8,6 +8,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
@@ -76,8 +77,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			//EPISODE_ARCHIVE 
 			};
 
+	private Context context;
+	
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.context = context;
 	}
 
 	@Override
@@ -229,6 +233,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// delete all episodes from this channel
 		db.delete(TABLE_EPISODE, EPISODE_CHANNEL + " = ?",
 				new String[] { String.valueOf(channel.getId()) });
+		
+		PictureHandler pic_db = new PictureHandler(this.context);
+		// TODO query for count image 
 		
 		// delete channel
 		int rmCnt = db.delete(TABLE_CHANNEL, CHANNEL_ID + " = ?",
