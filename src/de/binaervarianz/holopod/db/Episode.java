@@ -15,6 +15,7 @@ public class Episode implements Serializable {
 	String author;
 	String keywords;
 	long lastupdated;
+	long playCount;
 
 	String enc_url;
 	long enc_size; // tag:length

@@ -46,6 +46,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String EPISODE_AUTHOR = "author";
 	private static final String EPISODE_KEYWORDS = "keywords";
 	private static final String EPISODE_LASTUPDATED = "lastupdated";
+	private static final String EPISODE_PLAYCOUNT = "playcount";
 	private static final String EPISODE_ENC_URL = "enc_url";
 	private static final String EPISODE_ENC_SIZE = "enc_size";
 	private static final String EPISODE_ENC_RCVSIZE = "enc_rcvsize";
@@ -67,7 +68,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			EPISODE_CHANNEL, EPISODE_TITLE, EPISODE_SUBTITLE,
 			EPISODE_DESCRIPTION, EPISODE_LINK,
 			//EPISODE_IMAGE, EPISODE_AUTHOR,
-			//EPISODE_KEYWORDS, EPISODE_LASTUPDATED,
+			//EPISODE_KEYWORDS, EPISODE_LASTUPDATED, EPISODE_PLAYCOUNT
 			EPISODE_ENC_URL,
 			EPISODE_ENC_SIZE,
 			//EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
@@ -110,6 +111,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ EPISODE_IMAGE + " INTEGER DEFAULT 0,"
 				+ EPISODE_AUTHOR + " TEXT,"
 				+ EPISODE_KEYWORDS + " TEXT,"
+				+ EPISODE_PLAYCOUNT + " INTEGER DEFAULT 0,"
 				+ EPISODE_LASTUPDATED + " INTEGER,"
 				+ EPISODE_ENC_URL + " TEXT,"
 				+ EPISODE_ENC_SIZE + " INTEGER,"

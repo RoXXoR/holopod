@@ -20,6 +20,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -30,6 +32,7 @@ import android.widget.TextView;
 public class PodcastDetailsActivity extends Activity {
 	Channel podcast;
 	DatabaseHandler db;
+	ArrayAdapter<Episode> adapter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -48,7 +51,8 @@ public class PodcastDetailsActivity extends Activity {
 		Bitmap channelImage = pic_db.getPicture(podcast.getImage()).toBitmap();
 
 		View banner = (View) findViewById(R.id.podcast_detail_banner);
-		banner.setBackgroundColor(channelImage.getPixel(5, channelImage.getHeight()/2));
+		banner.setBackgroundColor(channelImage.getPixel(5,
+				channelImage.getHeight() / 2));
 
 		ImageView image = (ImageView) findViewById(R.id.podcast_detail_image);
 		image.setImageBitmap(channelImage);
@@ -66,10 +70,24 @@ public class PodcastDetailsActivity extends Activity {
 		copyright.setText(podcast.getCopyright());
 
 		ListView episodeList = (ListView) findViewById(R.id.podcast_detail_episode_listView);
-		ArrayAdapter<Episode> adapter = new ArrayAdapter<Episode>(this,
+		adapter = new ArrayAdapter<Episode>(this,
 				android.R.layout.simple_list_item_1,
 				db.getEpisodesByChannel(podcast));
 		episodeList.setAdapter(adapter);
+		episodeList.setClickable(true);
+		episodeList
+				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+					@Override
+					public void onItemClick(AdapterView<?> l, View v,
+							int position, long id) {
+						Episode listItem = (Episode) adapter.getItem(position);
+						Intent goDetails = new Intent(getApplicationContext(),
+								EpisodeDetailsActivity.class);
+						goDetails.putExtra("Episode", listItem);
+						startActivity(goDetails);
+					}
+				});
+
 	}
 
 	@Override

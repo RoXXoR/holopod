@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/PlayPodcast"
+        android:icon="@android:drawable/ic_media_play"
+        android:showAsAction="always"
+        android:title="@string/action_RefreshPodcast"/>
+    <item
+        android:id="@+id/menu_dl_rm"
+        android:showAsAction="never"
+        android:title="Download">
+    </item>
+    <item
+        android:id="@+id/menu_settings"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_settings"/>
+
+</menu>
