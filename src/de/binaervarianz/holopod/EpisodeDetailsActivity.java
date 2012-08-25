@@ -41,9 +41,11 @@ public class EpisodeDetailsActivity extends Activity {
 		}
 
 		TextView title = (TextView) findViewById(R.id.podcast_detail_title);
-		title.setText(episode.getSubtitle());
+		title.setText(episode.getTitle());
 		TextView subtitle = (TextView) findViewById(R.id.podcast_detail_subtitle);
 		subtitle.setText(episode.getSubtitle());
+		TextView description = (TextView) findViewById(R.id.podcast_detail_description);
+		description.setText(episode.getDescription());
 
 		BroadcastReceiver receiver = new BroadcastReceiver() {
 			@Override
