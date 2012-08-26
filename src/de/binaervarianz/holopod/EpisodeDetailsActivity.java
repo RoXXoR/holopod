@@ -93,7 +93,7 @@ public class EpisodeDetailsActivity extends Activity {
 					this,
 					Environment.DIRECTORY_PODCASTS,
 					url.substring(url.lastIndexOf('/') + 1,
-							url.lastIndexOf('.')));
+							url.length()));
 			episode.setDownloadId(dm.enqueue(request));
 			Intent dlService = new Intent(this, ReceiverService.class);
 			dlService.putExtra("Episode", episode);

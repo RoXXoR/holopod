@@ -2,8 +2,6 @@ package de.binaervarianz.holopod.db;
 
 import java.io.Serializable;
 
-import android.util.Log;
-
 public class Episode implements Serializable {
 	private static final long serialVersionUID = -7311381002303717513L;
 
@@ -13,11 +11,11 @@ public class Episode implements Serializable {
 	String subtitle;
 	String description;
 	String link;
-	long image;
+	long image = 0;
 	String author;
 	String keywords;
 	long lastupdated;
-	long playCount;
+	long playCount = 0;
 
 	String enc_url;
 	long enc_size; // tag:length
@@ -25,7 +23,7 @@ public class Episode implements Serializable {
 	long enc_duration;
 	String enc_type;
 	String enc_filepath;
-	Boolean enc_onDevice; // file present on device?
+	Boolean enc_onDevice = false; // file present on device?
 	long enc_pausedTime; // time in enclosure file where last paused
 	long enc_dlDate; // timestamp when enclosure was downloaded completely
 	long pubDate;

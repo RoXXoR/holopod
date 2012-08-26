@@ -297,7 +297,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (!episode.getEncFilepath().isEmpty()) {
 			values.put(EPISODE_ENC_FILEPATH, episode.getEncFilepath());
 		}
-		
+		values.put(EPISODE_ENC_ONDEVICE, episode.getEncOnDevice());
 		db.update(TABLE_EPISODE, values,
 				EPISODE_ID + " = " + String.valueOf(episode.getId()), null);
 	}
