@@ -8,6 +8,10 @@
             android:key="filterPodcast_setting"
             android:summary="@string/filterPodcastFeeds_description"
             android:title="@string/settings_filterPodcastFeeds" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="mobileNetwork_setting"
+            android:title="@string/settings_allowMobileNetwork" />
     </PreferenceCategory>
 
 </PreferenceScreen>

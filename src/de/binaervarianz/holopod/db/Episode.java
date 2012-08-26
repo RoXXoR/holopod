@@ -2,6 +2,8 @@ package de.binaervarianz.holopod.db;
 
 import java.io.Serializable;
 
+import android.util.Log;
+
 public class Episode implements Serializable {
 	private static final long serialVersionUID = -7311381002303717513L;
 
@@ -28,6 +30,7 @@ public class Episode implements Serializable {
 	long enc_dlDate; // timestamp when enclosure was downloaded completely
 	long pubDate;
 	Boolean archive; // not available in rss-feed anymore but on device
+	long downloadId; // not stored in database
 
 	// Constructor
 	public Episode() {
@@ -72,7 +75,7 @@ public class Episode implements Serializable {
 	// Constructor
 	public Episode(long id, long channel, String title, String subtitle,
 			String description, String link, String enc_url, long enc_size,
-			String enc_type) {
+			String enc_type, String enc_filepath, Boolean enc_onDevice) {
 		this._id = id;
 		this.channel = channel;
 		this.title = title;
@@ -82,6 +85,8 @@ public class Episode implements Serializable {
 		this.enc_url = enc_url;
 		this.enc_size = enc_size;
 		this.enc_type = enc_type;
+		this.enc_filepath = enc_filepath;
+		this.enc_onDevice = enc_onDevice;
 	}
 	
 	// Constructor
@@ -211,4 +216,28 @@ public class Episode implements Serializable {
 	public void setEncType(String enc_type) {
 		this.enc_type = enc_type;
 	}
+	public String getEncFilepath() {
+		return this.enc_filepath;
+	}
+
+	public void setEncFilepath(String enc_filepath) {
+		this.enc_filepath = enc_filepath;
+	}
+	
+	public Boolean getEncOnDevice() {
+		return this.enc_onDevice;
+	}
+	
+	public void setEncOnDevice(Boolean enc_onDevice) {
+		this.enc_onDevice = enc_onDevice;
+	}
+	
+	public long getDownloadId() {
+		return this.downloadId;
+	}
+
+	public void setDownloadId(long downloadId) {
+		this.downloadId = downloadId;
+	}
+	
 }

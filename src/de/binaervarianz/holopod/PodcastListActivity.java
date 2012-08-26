@@ -46,7 +46,7 @@ public class PodcastListActivity extends ListActivity {
 					@Override
 					public boolean onMenuItemActionExpand(MenuItem item) {
 						EditText add_input = (EditText) item.getActionView();
-						add_input.setText("http://alternativlos.org/");
+						add_input.setText("http://podcast.hr2.de/derTag/podcast.xml");
 						add_input.requestFocus();
 						add_input.setOnEditorActionListener(onDonePressed);
 						return true;

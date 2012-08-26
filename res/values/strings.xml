@@ -12,5 +12,6 @@
     <string name="altert_msg_unsubscribe">Are you sure you want to unsubscribe from this podcast?</string>
     <string name="altert_ok_unsubscribe">Unsubscribe</string>
     <string name="altert_no_unsubscribe">Cancel</string>
+    <string name="settings_allowMobileNetwork">Download via Mobile Network</string>
 
 </resources>

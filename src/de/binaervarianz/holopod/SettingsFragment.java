@@ -5,6 +5,8 @@ import android.preference.PreferenceFragment;
 
 public class SettingsFragment extends PreferenceFragment {
 	public static final String SETTING_FILTER_PODCASTS = "filterPodcast_setting";
+	public static final String SETTING_MOBILE_DOWNLOAD = "mobileNetwork_setting";
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

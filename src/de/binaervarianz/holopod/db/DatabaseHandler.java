@@ -67,19 +67,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private static final String[] EPISODE_FIELDS = { EPISODE_ID,
 			EPISODE_CHANNEL, EPISODE_TITLE, EPISODE_SUBTITLE,
 			EPISODE_DESCRIPTION, EPISODE_LINK,
-			//EPISODE_IMAGE, EPISODE_AUTHOR,
-			//EPISODE_KEYWORDS, EPISODE_LASTUPDATED, EPISODE_PLAYCOUNT
-			EPISODE_ENC_URL,
-			EPISODE_ENC_SIZE,
-			//EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
-			EPISODE_ENC_TYPE,
-			//EPISODE_ENC_FILEPATH, EPISODE_ENC_ONDEVICE,
-			//EPISODE_ENC_PAUSEDTIME, EPISODE_ENC_DLDATE, EPISODE_PUBDATE,
-			//EPISODE_ARCHIVE 
-			};
+			// EPISODE_IMAGE, EPISODE_AUTHOR,
+			// EPISODE_KEYWORDS, EPISODE_LASTUPDATED, EPISODE_PLAYCOUNT
+			EPISODE_ENC_URL, EPISODE_ENC_SIZE,
+			// EPISODE_ENC_RCVSIZE, EPISODE_DURATION,
+			EPISODE_ENC_TYPE, EPISODE_ENC_FILEPATH, EPISODE_ENC_ONDEVICE,
+	// EPISODE_ENC_PAUSEDTIME, EPISODE_ENC_DLDATE, EPISODE_PUBDATE,
+	// EPISODE_ARCHIVE
+	};
 
 	private Context context;
-	
+
 	public DatabaseHandler(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
@@ -139,7 +137,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// **********************
 	// start of podcast channel
 	// **********************
-	
+
 	// Add Channel (subscribe)
 	public Boolean addChannel(Channel channel) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -231,14 +229,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// remove channel
 	public Boolean removeChannel(Channel channel) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		
+
 		// delete all episodes from this channel
 		db.delete(TABLE_EPISODE, EPISODE_CHANNEL + " = ?",
 				new String[] { String.valueOf(channel.getId()) });
-		
-		PictureHandler pic_db = new PictureHandler(this.context);
-		// TODO query for count image 
-		
+
+		//PictureHandler pic_db = new PictureHandler(this.context);
+		// TODO query for count image
+
 		// delete channel
 		int rmCnt = db.delete(TABLE_CHANNEL, CHANNEL_ID + " = ?",
 				new String[] { String.valueOf(channel.getId()) });
@@ -249,7 +247,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	// **********************
 	// start of podcast items
 	// **********************
-	
+
 	// add podcast episodes
 	public Boolean addEpisode(Episode episode) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -269,14 +267,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.close();
 		return true;
 	}
-	
+
 	public List<Episode> getEpisodesByChannel(Channel channel) {
 		List<Episode> episodeList = new ArrayList<Episode>();
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		Cursor result = db.query(TABLE_EPISODE, EPISODE_FIELDS, EPISODE_CHANNEL
-				+ "=?", new String[] { String.valueOf(channel.getId()) }, null, null, null,
-				null);
+				+ "=?", new String[] { String.valueOf(channel.getId()) }, null,
+				null, null, null);
 		// create channel list from results
 		if (result.moveToFirst()) {
 			do {
@@ -284,11 +282,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						result.getLong(1), result.getString(2),
 						result.getString(3), result.getString(4),
 						result.getString(5), result.getString(6),
-						result.getLong(7), result.getString(8));
+						result.getLong(7), result.getString(8),
+						result.getString(9), result.getInt(10)>0);
 				episodeList.add(episode);
 			} while (result.moveToNext());
 		}
 		db.close();
 		return episodeList;
+	}
+
+	public void updateEpisode(Episode episode) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		if (!episode.getEncFilepath().isEmpty()) {
+			values.put(EPISODE_ENC_FILEPATH, episode.getEncFilepath());
+		}
+		
+		db.update(TABLE_EPISODE, values,
+				EPISODE_ID + " = " + String.valueOf(episode.getId()), null);
 	}
 }

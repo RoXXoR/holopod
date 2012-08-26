@@ -5,16 +5,13 @@ import de.binaervarianz.holopod.db.Episode;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DownloadManager;
-import android.app.DownloadManager.Query;
 import android.app.DownloadManager.Request;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +22,6 @@ public class EpisodeDetailsActivity extends Activity {
 	DatabaseHandler db;
 
 	private DownloadManager dm;
-	private long enqueue;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,35 +43,17 @@ public class EpisodeDetailsActivity extends Activity {
 		TextView description = (TextView) findViewById(R.id.podcast_detail_description);
 		description.setText(episode.getDescription());
 
-		BroadcastReceiver receiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String action = intent.getAction();
-				if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-					long downloadId = intent.getLongExtra(
-							DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-					Query query = new Query();
-					query.setFilterById(enqueue);
-					Cursor c = dm.query(query);
-					if (c.moveToFirst()) {
-						int columnIndex = c
-								.getColumnIndex(DownloadManager.COLUMN_STATUS);
-						if (DownloadManager.STATUS_SUCCESSFUL == c
-								.getInt(columnIndex)) {
+	}
 
-							String uriString = c
-									.getString(c
-											.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-							Log.i("Ep.DL", uriString);
-						}
-					}
-				}
-			}
-		};
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
 
-		registerReceiver(receiver, new IntentFilter(
-				DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-
+	@Override
+	protected void onPause() {
+		super.onPause();
 	}
 
 	@Override
@@ -86,6 +64,8 @@ public class EpisodeDetailsActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			finish();
@@ -99,7 +79,13 @@ public class EpisodeDetailsActivity extends Activity {
 			dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
 			final String url = episode.getEncUrl();
 			Request request = new Request(Uri.parse(url));
-			request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
+			if (settings.getBoolean(SettingsFragment.SETTING_MOBILE_DOWNLOAD,
+					false)) {
+				request.setAllowedNetworkTypes(Request.NETWORK_WIFI
+						+ Request.NETWORK_MOBILE);
+			} else {
+				request.setAllowedNetworkTypes(Request.NETWORK_WIFI);
+			}
 			request.setTitle("HoloPod");
 			request.setDescription(episode.toString());
 			request.setMimeType(episode.getEncType());
@@ -108,7 +94,10 @@ public class EpisodeDetailsActivity extends Activity {
 					Environment.DIRECTORY_PODCASTS,
 					url.substring(url.lastIndexOf('/') + 1,
 							url.lastIndexOf('.')));
-			enqueue = dm.enqueue(request);
+			episode.setDownloadId(dm.enqueue(request));
+			Intent dlService = new Intent(this, ReceiverService.class);
+			dlService.putExtra("Episode", episode);
+			startService(dlService);
 
 			return true;
 		case R.id.menu_settings:
@@ -121,5 +110,7 @@ public class EpisodeDetailsActivity extends Activity {
 		}
 
 	}
+
+	
 
 }

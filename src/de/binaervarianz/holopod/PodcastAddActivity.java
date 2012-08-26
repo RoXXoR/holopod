@@ -79,13 +79,14 @@ public class PodcastAddActivity extends ListActivity {
 			ArrayList<String> feeds = new ArrayList<String>();
 			ArrayList<String> podcastFeeds = new ArrayList<String>();
 			try {
-				Document mainpage = Jsoup.connect(urls[0]).ignoreContentType(true).get();
-				
+				Document mainpage = Jsoup.connect(urls[0])
+						.ignoreContentType(true).get();
+
 				if (!mainpage.getElementsByTag("enclosure").isEmpty()) {
 					podcastFeeds.add(urls[0]);
 					return podcastFeeds;
 				}
-				
+
 				Elements imports = mainpage.select("link[href]");
 				for (Element link : imports) {
 					if (link.attr("type").equalsIgnoreCase(
@@ -144,6 +145,7 @@ public class PodcastAddActivity extends ListActivity {
 
 		@Override
 		protected Channel doInBackground(String... urls) {
+			Log.i("BGChannelAdd", urls[0]);
 			Channel channel = new Channel(urls[0]);
 			try {
 				Document feedSource = Jsoup.connect(urls[0])
@@ -158,10 +160,16 @@ public class PodcastAddActivity extends ListActivity {
 							.select("channel itunes|subtitle").first().text());
 				}
 				if (!feedSource.select("channel itunes|image").isEmpty()) {
-
-					Picture channel_image = new Picture(feedSource
-							.select("channel itunes|image").first()
-							.attr("href"));
+					Picture channel_image;
+					if (!feedSource.select("channel itunes|image").first()
+							.attr("href").isEmpty()) {
+						channel_image = new Picture(feedSource
+								.select("channel itunes|image").first()
+								.attr("href"));
+					} else {
+						channel_image = new Picture(feedSource
+								.select("channel itunes|image").first().text());
+					}
 					PictureHandler pic_db = new PictureHandler(
 							getApplicationContext());
 					channel.setImage(pic_db.addPicture(channel_image));
@@ -196,8 +204,8 @@ public class PodcastAddActivity extends ListActivity {
 									.text());
 						}
 						if (!item.select("itunes|subtitle").isEmpty()) {
-							newEpisode.setSubtitle(item.select("itunes|subtitle")
-									.first().text());
+							newEpisode.setSubtitle(item
+									.select("itunes|subtitle").first().text());
 						}
 						if (!item.select("link").isEmpty()) {
 							newEpisode.setLink(item.select("link").first()
@@ -214,12 +222,13 @@ public class PodcastAddActivity extends ListActivity {
 							}
 						}
 						if (!item.select("enclosure").isEmpty()) {
-							newEpisode.setEncUrl(item.select("enclosure").first()
-									.attr("url"));
-							newEpisode.setEncSize(Long.decode(item.select("enclosure").first()
-									.attr("length")));
-							newEpisode.setEncType(item.select("enclosure").first()
-									.attr("type"));
+							newEpisode.setEncUrl(item.select("enclosure")
+									.first().attr("url"));
+							newEpisode.setEncSize(Long
+									.decode(item.select("enclosure").first()
+											.attr("length")));
+							newEpisode.setEncType(item.select("enclosure")
+									.first().attr("type"));
 						}
 						db.addEpisode(newEpisode);
 					}

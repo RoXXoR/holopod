@@ -1,14 +1,15 @@
-<manifest package="de.binaervarianz.holopod"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.binaervarianz.holopod"
     android:versionCode="0"
-    android:versionName="0.5" xmlns:android="http://schemas.android.com/apk/res/android">
+    android:versionName="0.5" >
 
     <uses-sdk
-        android:minSdkVersion="15"
+        android:minSdkVersion="14"
         android:targetSdkVersion="16" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:hardwareAccelerated="true"
@@ -29,12 +30,19 @@
             android:name="PodcastAddActivity"
             android:label="@string/title_add" >
         </activity>
-                <activity
+        <activity
             android:name="SettingsActivity"
             android:label="@string/menu_settings" >
         </activity>
-                <activity android:launchMode="singleTask" android:name="PodcastDetailsActivity"></activity>
-                <activity android:name="EpisodeDetailsActivity"></activity>
+        <activity
+            android:name="PodcastDetailsActivity"
+            android:launchMode="singleTask" >
+        </activity>
+        <activity android:name="EpisodeDetailsActivity" >
+        </activity>
+
+        <service android:name="ReceiverService" >
+        </service>
     </application>
 
 </manifest>
